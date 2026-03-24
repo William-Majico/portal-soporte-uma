@@ -1,0 +1,185 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Dashboard de Tickets">
+    <div class="text-left animate-[fadeIn_0.5s_ease-out]">
+        
+        <header class="flex justify-between items-start mb-[40px]">
+            <div>
+                <h2 class="text-[2.2rem] font-[800] text-[#1a1a1b] m-0 tracking-tight">Panel de Gestión TI</h2>
+                <p class="text-[#64748b] mt-1">Monitoreo de cumplimiento de SLAs y SOP institucional.</p>
+            </div>
+
+            <div class="flex flex-col items-end gap-3">
+                <button onclick="logout()" class="flex items-center gap-2 text-[0.8rem] font-[700] text-slate-400 hover:text-[#d32f2f] transition-all bg-slate-100 px-3 py-2 rounded-lg cursor-pointer border-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    Cerrar Sesión
+                </button>
+
+                <div class="flex items-center gap-[12px]">
+                    <div class="bg-[#e2e8f0] p-[4px] rounded-[10px] flex">
+                        <button id="btn-list" onclick="switchDashboardView('table')" class="bg-white text-[#d32f2f] shadow-[0_2px_6px_rgba(0,0,0,0.1)] py-[8px] px-[20px] rounded-[7px] font-[700] text-[0.85rem] cursor-pointer transition-all border-none">Lista</button>
+                        <button id="btn-kanban" onclick="switchDashboardView('kanban')" class="bg-transparent text-[#64748b] py-[8px] px-[20px] rounded-[7px] font-[700] text-[0.85rem] cursor-pointer transition-all border-none">Kanban</button>
+                    </div>
+                    <button id="export-btn" class="bg-[#15803d] text-white py-[12px] px-[18px] rounded-[10px] font-[700] text-[0.85rem] cursor-pointer hover:bg-green-800 transition-colors border-none shadow-sm">📥 Exportar Excel</button>
+                </div>
+            </div>
+        </header>
+
+        <div id="table-container" class="bg-[#ffffff] rounded-[14px] overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-[#e2e8f0]">
+            <table id="mi-tabla" class="w-full border-collapse text-left">
+                <thead>
+                    <tr>
+                        <th class="bg-[#f8fafc] p-[18px] text-[0.8rem] border-b border-[#e2e8f0] text-slate-500 font-bold">ID TICKET</th>
+                        <th class="bg-[#f8fafc] p-[18px] text-[0.8rem] border-b border-[#e2e8f0] text-slate-500 font-bold">SOLICITANTE</th>
+                        <th class="bg-[#f8fafc] p-[18px] text-[0.8rem] border-b border-[#e2e8f0] text-slate-500 font-bold">CATEGORÍA</th>
+                        <th class="bg-[#f8fafc] p-[18px] text-[0.8rem] border-b border-[#e2e8f0] text-slate-500 font-bold">DIAGNÓSTICO SOP</th>
+                        <th class="bg-[#f8fafc] p-[18px] text-[0.8rem] border-b border-[#e2e8f0] text-slate-500 font-bold">SLA META</th>
+                        <th class="bg-[#f8fafc] p-[18px] text-[0.8rem] border-b border-[#e2e8f0] text-slate-500 font-bold">ESTADO</th>
+                        <th class="bg-[#f8fafc] p-[18px] text-[0.8rem] border-b border-[#e2e8f0] text-slate-500 font-bold text-center">GESTIÓN</th>
+                    </tr>
+                </thead>
+                <tbody id="ticket-body">
+                    </tbody>
+            </table>
+        </div>
+
+        <div id="kanban-container" class="hidden grid grid-cols-3 gap-[25px]">
+            <div id="col-Abiertos" class="kanban-col bg-[#f1f5f9] rounded-[20px] min-h-[600px] p-[20px]" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div class="font-[800] text-[0.9rem] flex items-center gap-[10px] mb-[20px] text-slate-700 uppercase tracking-wider"><div class="w-[10px] h-[10px] rounded-full bg-[#ef4444]"></div> Abiertos</div>
+                <div id="cards-Abierto" class="flex flex-col gap-[15px]"></div>
+            </div>
+            <div id="col-En-Proceso" class="kanban-col bg-[#f1f5f9] rounded-[20px] min-h-[600px] p-[20px]" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div class="font-[800] text-[0.9rem] flex items-center gap-[10px] mb-[20px] text-slate-700 uppercase tracking-wider"><div class="w-[10px] h-[10px] rounded-full bg-[#f59e0b]"></div> En Proceso</div>
+                <div id="cards-En-Proceso" class="flex flex-col gap-[15px]"></div>
+            </div>
+            <div id="col-Resueltos" class="kanban-col bg-[#f1f5f9] rounded-[20px] min-h-[600px] p-[20px]" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div class="font-[800] text-[0.9rem] flex items-center gap-[10px] mb-[20px] text-slate-700 uppercase tracking-wider"><div class="w-[10px] h-[10px] rounded-full bg-[#10b981]"></div> Resueltos</div>
+                <div id="cards-Resuelto" class="flex flex-col gap-[15px]"></div>
+            </div>
+        </div>
+    </div>
+
+    <script is:inline src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script is:inline src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script is:inline>
+        // --- SEGURIDAD ---
+        if (localStorage.getItem('is_admin') !== 'true') {
+            window.location.href = '/login';
+        }
+
+        function logout() {
+            localStorage.removeItem('is_admin');
+            window.location.href = '/login';
+        }
+
+        // --- LÓGICA DE DATOS ---
+        let tickets = JSON.parse(localStorage.getItem('uma_tickets')) || [];
+
+        function saveTickets() {
+            localStorage.setItem('uma_tickets', JSON.stringify(tickets));
+        }
+
+        function renderUI() {
+            const tbody = document.getElementById('ticket-body');
+            const cAbierto = document.getElementById('cards-Abierto');
+            const cProceso = document.getElementById('cards-En-Proceso');
+            const cResuelto = document.getElementById('cards-Resuelto');
+
+            tbody.innerHTML = ''; cAbierto.innerHTML = ''; cProceso.innerHTML = ''; cResuelto.innerHTML = '';
+
+            tickets.forEach(t => {
+                const catClass = t.tipo === 'hardware' ? 'bg-red-50 text-red-700' : 'bg-blue-50 text-blue-700';
+                
+                // RENDER TABLA
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition-colors";
+                tr.innerHTML = `
+                    <td class="p-[18px] border-b border-[#f1f5f9] font-mono text-sm"><strong>${t.id}</strong></td>
+                    <td class="p-[18px] border-b border-[#f1f5f9] font-medium">${t.solicitante}</td>
+                    <td class="p-[18px] border-b border-[#f1f5f9]"><span class="${catClass} px-2 py-1 rounded text-[0.65rem] font-bold uppercase tracking-wide">${t.categoria}</span></td>
+                    <td class="p-[18px] border-b border-[#f1f5f9] text-sm">${t.diagnostico}</td>
+                    <td class="p-[18px] border-b border-[#f1f5f9]"><span class="text-[#d32f2f] font-bold text-sm">${t.sla}</span></td>
+                    <td class="p-[18px] border-b border-[#f1f5f9] text-sm font-bold">${t.estado}</td>
+                    <td class="p-[18px] border-b border-[#f1f5f9] text-center">
+                        <button onclick="cerrarTicket('${t.id}')" class="text-slate-300 hover:text-red-600 transition-all p-2 cursor-pointer bg-transparent border-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+
+                // RENDER KANBAN
+                const card = document.createElement('div');
+                card.id = t.id; card.draggable = true; card.ondragstart = drag;
+                card.className = "bg-white rounded-xl p-5 shadow-sm border-l-4 cursor-grab active:cursor-grabbing hover:shadow-md transition-all relative group";
+                card.style.borderLeftColor = t.estado === 'Abierto' ? '#ef4444' : t.estado === 'En Proceso' ? '#f59e0b' : '#10b981';
+                card.innerHTML = `
+                    <button onclick="cerrarTicket('${t.id}')" class="absolute top-4 right-4 text-slate-300 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-all cursor-pointer bg-transparent border-none">✕</button>
+                    <span class="${catClass} text-[0.6rem] font-black uppercase mb-3 inline-block">${t.categoria}</span>
+                    <h4 class="m-0 text-sm font-bold text-slate-800">${t.id} - ${t.solicitante}</h4>
+                    <p class="text-[0.75rem] text-slate-500 mt-2 mb-0">${t.diagnostico}</p>
+                    <div class="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center">
+                        <span class="text-[0.7rem] font-bold text-red-600 italic">SLA: ${t.sla}</span>
+                    </div>
+                `;
+                
+                if(t.estado === 'Abierto') cAbierto.appendChild(card);
+                else if(t.estado === 'En Proceso') cProceso.appendChild(card);
+                else cResuelto.appendChild(card);
+            });
+        }
+
+        function cerrarTicket(id) {
+            Swal.fire({
+                title: '¿Archivar ticket?',
+                text: "El ticket " + id + " será eliminado del panel actual.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d32f2f',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Sí, archivar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    tickets = tickets.filter(t => t.id !== id);
+                    saveTickets(); renderUI();
+                }
+            });
+        }
+
+        // --- FUNCIONES DE VISTA Y DRAG & DROP ---
+        function switchDashboardView(viewType) {
+            const isTable = viewType === 'table';
+            document.getElementById('table-container').classList.toggle('hidden', !isTable);
+            document.getElementById('kanban-container').classList.toggle('hidden', isTable);
+            
+            document.getElementById('btn-list').className = isTable ? "bg-white text-[#d32f2f] shadow-[0_2px_6px_rgba(0,0,0,0.1)] py-[8px] px-[20px] rounded-[7px] font-[700] text-[0.85rem] cursor-pointer transition-all border-none" : "bg-transparent text-[#64748b] py-[8px] px-[20px] rounded-[7px] font-[700] text-[0.85rem] cursor-pointer transition-all border-none";
+            document.getElementById('btn-kanban').className = !isTable ? "bg-white text-[#d32f2f] shadow-[0_2px_6px_rgba(0,0,0,0.1)] py-[8px] px-[20px] rounded-[7px] font-[700] text-[0.85rem] cursor-pointer transition-all border-none" : "bg-transparent text-[#64748b] py-[8px] px-[20px] rounded-[7px] font-[700] text-[0.85rem] cursor-pointer transition-all border-none";
+        }
+
+        function allowDrop(ev) { ev.preventDefault(); }
+        function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
+        function drop(ev) {
+            ev.preventDefault();
+            const id = ev.dataTransfer.getData("text");
+            const dropCol = ev.target.closest('.kanban-col');
+            if (dropCol) {
+                const newState = dropCol.id.replace('col-', '').replace('-', ' ');
+                const idx = tickets.findIndex(t => t.id === id);
+                if (idx !== -1) {
+                    tickets[idx].estado = newState;
+                    saveTickets(); renderUI();
+                }
+            }
+        }
+
+        document.getElementById('export-btn').onclick = () => {
+            const wb = XLSX.utils.table_to_book(document.getElementById("mi-tabla"), {sheet:"Soporte UMA"});
+            XLSX.writeFile(wb, "Reporte_Soporte_UMA.xlsx");
+        };
+
+        window.onload = renderUI;
+    </script>
+</Layout>

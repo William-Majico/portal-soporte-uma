@@ -1,0 +1,15 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+@theme {
+  --font-sans: 'Inter', sans-serif;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Configuración global para que todo lo clicable tenga el puntero de mano */
+button, a, [role="button"], input[type="submit"] {
+  cursor: pointer !important;
+}

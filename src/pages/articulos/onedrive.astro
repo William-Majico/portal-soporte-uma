@@ -1,0 +1,149 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="OneDrive">
+    <div class="max-w-[650px] mx-auto text-left">
+        
+        <div class="bg-[#e2e8f0] h-[10px] rounded-[10px] mb-[35px] overflow-hidden">
+            <div id="od-progress-bar" class="bg-[#d32f2f] h-full w-[20%] rounded-[10px] transition-all duration-500 shadow-[0_0_10px_rgba(211,47,47,0.3)]"></div>
+        </div>
+
+        <div class="bg-[#ffffff] p-[45px] rounded-[16px] shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-[#e2e8f0] min-h-[320px]">
+            
+            <div id="od-step-1" class="step block animate-[slideUp_0.4s_ease]">
+                <h3 class="text-xl font-bold mb-2">Problema en OneDrive</h3>
+                <p class="text-[#1e293b]">Seleccione el tipo de incidencia detectada en su cuenta institucional:</p>
+                <div class="flex flex-col gap-[15px] mt-[25px]">
+                    <button onclick="startBranch('cuota')" class="w-full bg-white border-[2px] border-[#e2e8f0] p-[20px] rounded-[12px] text-left font-[700] hover:border-[#d32f2f] hover:bg-[#fef2f2] hover:scale-[1.01] transition-all">☁️ Almacenamiento lleno / Cuota excedida</button>
+                    <button onclick="startBranch('permisos')" class="w-full bg-white border-[2px] border-[#e2e8f0] p-[20px] rounded-[12px] text-left font-[700] hover:border-[#d32f2f] hover:bg-[#fef2f2] hover:scale-[1.01] transition-all">🔑 Problemas de Acceso o Permisos</button>
+                </div>
+            </div>
+
+            <div id="od-step-cuota-1" class="step hidden animate-[slideUp_0.4s_ease]">
+                <span class="inline-block bg-[#fee2e2] text-[#991b1b] text-[0.75rem] font-[800] px-[14px] py-[5px] rounded-[30px] mb-[20px]">Espacio - Nivel 0</span>
+                <h3 class="text-xl font-bold mb-2">Vaciar Papelera</h3>
+                <p class="text-[#1e293b]">Vaya a la "Papelera de reciclaje" en el menú izquierdo y presione el botón <strong>Vaciar papelera</strong>.</p>
+                <div class="flex gap-[15px] mt-[30px]">
+                    <button onclick="solvedAction()" class="flex-1 bg-[#10b981] text-white p-[16px] rounded-[10px] font-[700] hover:bg-emerald-600 transition-colors">✅ ¡Solucionado!</button>
+                    <button onclick="nextStepOD('cuota', 2)" class="flex-1 bg-[#1a1a1b] text-white p-[16px] rounded-[10px] font-[700] hover:bg-black transition-colors">Sigue lleno</button>
+                </div>
+            </div>
+
+            <div id="od-step-cuota-2" class="step hidden animate-[slideUp_0.4s_ease]">
+                <span class="inline-block bg-[#fee2e2] text-[#991b1b] text-[0.75rem] font-[800] px-[14px] py-[5px] rounded-[30px] mb-[20px]">Espacio - Nivel 0</span>
+                <h3 class="text-xl font-bold mb-2">Limpieza de Archivos Pesados</h3>
+                <p class="text-[#1e293b]">Ordene sus archivos por <strong>tamaño</strong>. Identifique y elimine archivos antiguos o pesados que ya no necesite.</p>
+                <div class="flex gap-[15px] mt-[30px]">
+                    <button onclick="solvedAction()" class="flex-1 bg-[#10b981] text-white p-[16px] rounded-[10px] font-[700] hover:bg-emerald-600 transition-colors">✅ ¡Solucionado!</button>
+                    <button onclick="prepareTicketOD('Aumento de Cuota (Escalado L2)')" class="flex-1 bg-[#1a1a1b] text-white p-[16px] rounded-[10px] font-[700] hover:bg-black transition-colors">Es indispensable más espacio</button>
+                </div>
+            </div>
+
+            <div id="od-step-permisos-1" class="step hidden animate-[slideUp_0.4s_ease]">
+                <span class="inline-block bg-[#fee2e2] text-[#991b1b] text-[0.75rem] font-[800] px-[14px] py-[5px] rounded-[30px] mb-[20px]">Acceso - Nivel 0</span>
+                <h3 class="text-xl font-bold mb-2">Verificación de Credenciales</h3>
+                <p class="text-[#1e293b]">Asegúrese de haber iniciado sesión correctamente con su correo institucional UMA.</p>
+                <div class="flex gap-[15px] mt-[30px]">
+                    <button onclick="solvedAction()" class="flex-1 bg-[#10b981] text-white p-[16px] rounded-[10px] font-[700] hover:bg-emerald-600 transition-colors">✅ Ya inicié sesión</button>
+                    <button onclick="nextStepOD('permisos', 2)" class="flex-1 bg-[#1a1a1b] text-white p-[16px] rounded-[10px] font-[700] hover:bg-black transition-colors">Sigue el error</button>
+                </div>
+            </div>
+
+            <div id="od-step-permisos-2" class="step hidden animate-[slideUp_0.4s_ease]">
+                <span class="inline-block bg-[#fee2e2] text-[#991b1b] text-[0.75rem] font-[800] px-[14px] py-[5px] rounded-[30px] mb-[20px]">Acceso - Triage</span>
+                <h3 class="text-xl font-bold mb-2">Gestión de Propietario</h3>
+                <p class="text-[#1e293b]">¿Presenta fallas masivas o los servidores de Microsoft parecen estar caídos?</p>
+                <div class="flex gap-[15px] mt-[30px]">
+                    <button onclick="prepareTicketOD('Falla de Fábrica (Escalado L4 Microsoft)')" class="flex-1 bg-[#ef4444] text-white p-[16px] rounded-[10px] font-[700] hover:bg-red-600 transition-colors">Sí, falla global</button>
+                    <button onclick="prepareTicketOD('Corrección de Permisos Complejos (L2)')" class="flex-1 bg-[#1a1a1b] text-white p-[16px] rounded-[10px] font-[700] hover:bg-black transition-colors">No, solo es mi carpeta</button>
+                </div>
+            </div>
+
+            <div id="od-step-final" class="step hidden animate-[slideUp_0.4s_ease]">
+                <h3 class="text-xl font-bold mb-2">Escalando Incidente</h3>
+                <p class="text-[#1e293b] mb-4">Diagnóstico SOP: <strong id="od-ticket-type" class="text-[#d32f2f]"></strong></p>
+                <form onsubmit="guardarTicketCloud(event)">
+                    <input type="text" id="nombre-cloud" placeholder="Tu nombre completo" required class="w-full p-[16px] border-[2px] border-[#e2e8f0] rounded-[10px] my-[25px] outline-none text-[1rem] focus:border-[#d32f2f] transition-colors">
+                    <button type="submit" class="w-full bg-[#d32f2f] text-white p-[18px] rounded-[10px] font-[800] text-[1rem] hover:bg-red-800 transition-colors">Enviar Reporte Cloud</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <script is:inline>
+        let currentDiagnosisOD = "";
+
+        function startBranch(type) {
+            hideAllSteps();
+            const firstStep = type === 'cuota' ? 'od-step-cuota-1' : 'od-step-permisos-1';
+            document.getElementById(firstStep).classList.remove('hidden');
+            document.getElementById(firstStep).classList.add('block');
+            document.getElementById('od-progress-bar').style.width = '40%';
+        }
+
+        function nextStepOD(branch, step) {
+            hideAllSteps();
+            const stepId = `od-step-${branch}-${step}`;
+            document.getElementById(stepId).classList.remove('hidden');
+            document.getElementById(stepId).classList.add('block');
+            document.getElementById('od-progress-bar').style.width = '70%';
+        }
+
+        function prepareTicketOD(diagnosis) {
+            currentDiagnosisOD = diagnosis;
+            hideAllSteps();
+            document.getElementById('od-step-final').classList.remove('hidden');
+            document.getElementById('od-step-final').classList.add('block');
+            document.getElementById('od-ticket-type').innerText = diagnosis;
+            document.getElementById('od-progress-bar').style.width = '100%';
+        }
+
+        function hideAllSteps() {
+            document.querySelectorAll('.step').forEach(s => {
+                s.classList.remove('block');
+                s.classList.add('hidden');
+            });
+        }
+
+        function solvedAction() {
+            // Importamos SweetAlert si está disponible en el layout
+            if (window.Swal) {
+                Swal.fire({
+                    title: '¡Excelente!',
+                    text: 'Has resuelto el problema de forma autónoma (Nivel 0).',
+                    icon: 'success',
+                    confirmButtonColor: '#10b981'
+                }).then(() => window.location.href = '/');
+            } else {
+                alert("¡Excelente! Problema resuelto (Nivel 0).");
+                window.location.href = '/';
+            }
+        }
+
+        function guardarTicketCloud(event) {
+            event.preventDefault();
+            const nombre = document.getElementById('nombre-cloud').value;
+            
+            // Lógica de SLA del documento
+            let sla = "2 Horas"; // Default L2
+            if(currentDiagnosisOD.includes("L4")) sla = "Garantía Fabricante";
+
+            const nuevoTicket = {
+                id: "TIC-" + Math.floor(1000 + Math.random() * 9000), 
+                solicitante: nombre,
+                categoria: "Soporte Cloud",
+                diagnostico: currentDiagnosisOD,
+                sla: sla,
+                estado: "Abierto",
+                tipo: "cloud"
+            };
+
+            let ticketsGuardados = JSON.parse(localStorage.getItem('uma_tickets')) || [];
+            ticketsGuardados.push(nuevoTicket);
+            localStorage.setItem('uma_tickets', JSON.stringify(ticketsGuardados));
+            window.location.href = '/dashboard';
+        }
+    </script>
+</Layout>

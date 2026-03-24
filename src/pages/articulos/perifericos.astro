@@ -1,0 +1,134 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Hardware">
+    <div class="max-w-[650px] mx-auto text-left">
+        
+        <div class="bg-[#e2e8f0] h-[10px] rounded-[10px] mb-[35px] overflow-hidden">
+            <div id="progress-bar" class="bg-[#d32f2f] h-full w-[16%] rounded-[10px] transition-all duration-500 shadow-[0_0_10px_rgba(211,47,47,0.3)]"></div>
+        </div>
+
+        <div class="bg-[#ffffff] p-[45px] rounded-[16px] shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-[#e2e8f0] min-h-[320px]">
+            
+            <div id="step-1" class="step block animate-[slideUp_0.4s_ease]">
+                <span class="inline-block bg-[#fee2e2] text-[#991b1b] text-[0.75rem] font-[800] px-[14px] py-[5px] rounded-[30px] mb-[20px]">Paso 1: Energía</span>
+                <h3 class="text-xl font-bold mb-2">Revisión de cables y encendido</h3>
+                <p class="text-[#1e293b]">Asegúrese de que el monitor esté encendido. Si no da imagen, desconecte y vuelva a conectar el cable de energía al tomacorriente.</p>
+                <div class="flex gap-[15px] mt-[30px]">
+                    <button onclick="solvedAction()" class="flex-1 bg-[#10b981] text-white p-[16px] rounded-[10px] font-[700] hover:bg-emerald-600 transition-colors">✅ ¡Solucionado!</button>
+                    <button onclick="nextStep(2)" class="flex-1 bg-[#1a1a1b] text-white p-[16px] rounded-[10px] font-[700] hover:bg-black transition-colors">Sigue fallando</button>
+                </div>
+            </div>
+
+            <div id="step-2" class="step hidden animate-[slideUp_0.4s_ease]">
+                <span class="inline-block bg-[#fee2e2] text-[#991b1b] text-[0.75rem] font-[800] px-[14px] py-[5px] rounded-[30px] mb-[20px]">Paso 2: Conexión</span>
+                <h3 class="text-xl font-bold mb-2">Prueba de Puertos y Limpieza</h3>
+                <p class="text-[#1e293b]">Verifique que el puerto USB no tenga polvo o pelusa. Intente conectar el dispositivo en una ranura USB diferente.</p>
+                <div class="flex gap-[15px] mt-[30px]">
+                    <button onclick="solvedAction()" class="flex-1 bg-[#10b981] text-white p-[16px] rounded-[10px] font-[700] hover:bg-emerald-600 transition-colors">✅ ¡Solucionado!</button>
+                    <button onclick="nextStep(3)" class="flex-1 bg-[#1a1a1b] text-white p-[16px] rounded-[10px] font-[700] hover:bg-black transition-colors">Sigue fallando</button>
+                </div>
+            </div>
+
+            <div id="step-3" class="step hidden animate-[slideUp_0.4s_ease]">
+                <span class="inline-block bg-[#fee2e2] text-[#991b1b] text-[0.75rem] font-[800] px-[14px] py-[5px] rounded-[30px] mb-[20px]">Paso 3: Seguridad</span>
+                <h3 class="text-xl font-bold mb-2">Inspección Física del Cable</h3>
+                <p class="text-[#1e293b]">¿El cable presenta daños visibles, está pelado o roto? Requiere un reemplazo inmediato por seguridad institucional.</p>
+                <div class="flex gap-[15px] mt-[30px]">
+                    <button onclick="setEscalation('L1 - Daño Físico'); nextStep(6);" class="flex-1 bg-[#ef4444] text-white p-[16px] rounded-[10px] font-[700] hover:bg-red-600 transition-colors">Sí, está roto</button>
+                    <button onclick="nextStep(4)" class="flex-1 bg-[#1a1a1b] text-white p-[16px] rounded-[10px] font-[700] hover:bg-black transition-colors">El cable está bien</button>
+                </div>
+            </div>
+
+            <div id="step-4" class="step hidden animate-[slideUp_0.4s_ease]">
+                <span class="inline-block bg-[#fee2e2] text-[#991b1b] text-[0.75rem] font-[800] px-[14px] py-[5px] rounded-[30px] mb-[20px]">Paso 4: Software</span>
+                <h3 class="text-xl font-bold mb-2">Prueba de Configuración</h3>
+                <p class="text-[#1e293b]">Presione la tecla <strong>Windows + P</strong>. ¿Aparece el menú de proyección o el teclado reacciona a los comandos del sistema?</p>
+                <div class="flex gap-[15px] mt-[30px]">
+                    <button onclick="solvedAction()" class="flex-1 bg-[#10b981] text-white p-[16px] rounded-[10px] font-[700] hover:bg-emerald-600 transition-colors">✅ ¡Solucionado!</button>
+                    <button onclick="setEscalation('L2 - Error de Drivers/SO'); nextStep(5);" class="flex-1 bg-[#1a1a1b] text-white p-[16px] rounded-[10px] font-[700] hover:bg-black transition-colors">No reacciona</button>
+                </div>
+            </div>
+
+            <div id="step-5" class="step hidden animate-[slideUp_0.4s_ease]">
+                <span class="inline-block bg-[#fee2e2] text-[#991b1b] text-[0.75rem] font-[800] px-[14px] py-[5px] rounded-[30px] mb-[20px]">Paso 5: Triage</span>
+                <h3 class="text-xl font-bold mb-2">Validación de Área</h3>
+                <p class="text-[#1e293b]">¿Hay otros compañeros en su misma área con la misma falla masiva hoy?</p>
+                <div class="flex gap-[15px] mt-[30px]">
+                    <button onclick="setEscalation('L4 - Defecto de Lote'); nextStep(6);" class="flex-1 bg-[#ef4444] text-white p-[16px] rounded-[10px] font-[700] hover:bg-red-600 transition-colors">Sí, falla masiva</button>
+                    <button onclick="nextStep(6);" class="flex-1 bg-[#1a1a1b] text-white p-[16px] rounded-[10px] font-[700] hover:bg-black transition-colors">No, solo soy yo</button>
+                </div>
+            </div>
+
+            <div id="step-6" class="step hidden animate-[slideUp_0.4s_ease]">
+                <span class="inline-block bg-[#fee2e2] text-[#991b1b] text-[0.75rem] font-[800] px-[14px] py-[5px] rounded-[30px] mb-[20px]">Final</span>
+                <h3 class="text-xl font-bold mb-2">Registro de Incidente</h3>
+                <p class="text-[#1e293b] mb-4">Diagnóstico preliminar: <strong id="hw-diag-pre" class="text-[#d32f2f]">L1 - Reemplazo Menor</strong></p>
+                
+                <form onsubmit="guardarTicketHardware(event)">
+                    <input type="text" id="nombre-hardware" placeholder="Tu nombre completo" required class="w-full p-[16px] border-[2px] border-[#e2e8f0] rounded-[10px] my-[25px] outline-none text-[1rem] focus:border-[#d32f2f] transition-colors">
+                    <button type="submit" class="w-full bg-[#d32f2f] text-white p-[18px] rounded-[10px] font-[800] text-[1rem] hover:bg-red-800 transition-colors">Crear Ticket Hardware</button>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+
+    <script is:inline>
+        let currentEscalation = "L1 - Reemplazo Menor";
+        
+        function nextStep(step) {
+            document.querySelectorAll('.step').forEach(s => { 
+                s.classList.remove('block'); 
+                s.classList.add('hidden'); 
+            });
+            const target = document.getElementById(`step-${step}`);
+            target.classList.remove('hidden');
+            target.classList.add('block');
+            document.getElementById('progress-bar').style.width = (step / 6 * 100) + '%';
+            if(step === 6) document.getElementById('hw-diag-pre').innerText = currentEscalation;
+        }
+        
+        function setEscalation(type) { currentEscalation = type; }
+
+        function solvedAction() {
+            if (window.Swal) {
+                Swal.fire({
+                    title: '¡Excelente!',
+                    text: 'Has resuelto el problema de forma autónoma (Nivel 0).',
+                    icon: 'success',
+                    confirmButtonColor: '#10b981'
+                }).then(() => window.location.href = '/');
+            } else {
+                alert("¡Excelente! Problema resuelto.");
+                window.location.href = '/';
+            }
+        }
+
+        function guardarTicketHardware(event) {
+            event.preventDefault();
+            const nombre = document.getElementById('nombre-hardware').value;
+            
+            let slaAsignado = "15 MIN";
+            if(currentEscalation.includes("L1")) slaAsignado = "2 Horas";
+            if(currentEscalation.includes("L2")) slaAsignado = "4 Horas";
+            if(currentEscalation.includes("L4")) slaAsignado = "Garantía Fabricante";
+
+            const nuevoTicket = {
+                id: "TIC-" + Math.floor(1000 + Math.random() * 9000),
+                solicitante: nombre,
+                categoria: "Soporte Hardware",
+                diagnostico: currentEscalation,
+                sla: slaAsignado,
+                estado: "Abierto",
+                tipo: "hardware"
+            };
+
+            let ticketsGuardados = JSON.parse(localStorage.getItem('uma_tickets')) || [];
+            ticketsGuardados.push(nuevoTicket);
+            localStorage.setItem('uma_tickets', JSON.stringify(ticketsGuardados));
+            window.location.href = '/dashboard';
+        }
+    </script>
+</Layout>

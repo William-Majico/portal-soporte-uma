@@ -1,0 +1,40 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Centro de Resolución">
+    <section class="animate-[fadeIn_0.8s_ease-out]">
+        
+        <div class="mb-[60px] max-w-[800px] mx-auto">
+            <h1 class="text-[2.8rem] font-[800] text-[#1a1a1b] tracking-[-1px] m-0 mb-[10px]">Centro de Resolución</h1>
+            <p class="m-0 text-[#1e293b] mb-[35px]">Busca una solución o selecciona el servicio afectado para iniciar Nivel 0.</p>
+            
+            <div class="relative group">
+                <input 
+                    type="text" 
+                    placeholder="¿Qué problema tienes hoy? Ej: Teclado, OneDrive..." 
+                    class="w-full p-[18px_25px] pl-[55px] bg-white border-2 border-[#e2e8f0] rounded-[15px] outline-none shadow-[0_4px_15px_rgba(0,0,0,0.03)] focus:border-[#d32f2f] focus:shadow-[0_10px_25px_rgba(211,47,47,0.1)] transition-all text-[1.05rem]"
+                />
+                <div class="absolute left-[20px] top-[50%] translate-y-[-50%] text-slate-400 group-focus-within:text-[#d32f2f] transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-[30px] text-center max-w-[1000px] mx-auto">
+            
+            <a href="/articulos/perifericos" class="bg-[#ffffff] border border-[#e2e8f0] rounded-[12px] p-[45px_30px] shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:-translate-y-[6px] hover:border-[#d32f2f] hover:shadow-[0_10px_30px_rgba(0,0,0,0.08)] transition-all duration-300 block relative">
+                <div class="text-[3.5rem] mb-[25px] block">⌨️</div>
+                <h2 class="text-[1.15rem] font-[700] m-0 mb-[10px] text-[#1a1a1b] whitespace-nowrap">Fallas en periféricos (teclados/monitores)</h2>
+                <p class="m-0 text-[#64748b] text-[0.9rem]">Sustitución menor y diagnóstico físico de hardware.</p>
+            </a>
+
+            <a href="/articulos/onedrive" class="bg-[#ffffff] border border-[#e2e8f0] rounded-[12px] p-[45px_30px] shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:-translate-y-[6px] hover:border-[#d32f2f] hover:shadow-[0_10px_30px_rgba(0,0,0,0.08)] transition-all duration-300 block relative">
+                <div class="text-[3.5rem] mb-[25px] block">☁️</div>
+                <h2 class="text-[1.15rem] font-[700] m-0 mb-[10px] text-[#1a1a1b] whitespace-nowrap">Permisos y Cuotas OneDrive</h2>
+                <p class="m-0 text-[#64748b] text-[0.9rem]">Gestión de espacio y acceso a carpetas en la nube.</p>
+            </a>
+
+        </nav>
+    </section>
+</Layout>

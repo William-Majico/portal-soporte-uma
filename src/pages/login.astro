@@ -1,0 +1,64 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Acceso Administrativo">
+  <div class="max-w-[400px] mx-auto mt-20 animate-[fadeIn_0.5s_ease-out]">
+    <div class="bg-white p-10 rounded-[16px] shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-[#e2e8f0]">
+      <div class="text-center mb-8">
+        <div class="text-[#d32f2f] text-4xl mb-2">🔐</div>
+        <h2 class="text-[1.8rem] font-bold text-[#1a1a1b]">Panel TI</h2>
+        <p class="text-slate-500 text-sm">Solo personal autorizado</p>
+      </div>
+      
+      <form id="login-form" class="space-y-4 text-left">
+        <div>
+          <label class="block text-sm font-bold text-slate-600 mb-2">Usuario</label>
+          <input type="text" id="user" required class="w-full p-4 border-2 border-[#e2e8f0] rounded-[10px] outline-none focus:border-[#d32f2f] transition-all">
+        </div>
+        <div>
+          <label class="block text-sm font-bold text-slate-600 mb-2">Contraseña</label>
+          <input type="password" id="pass" required class="w-full p-4 border-2 border-[#e2e8f0] rounded-[10px] outline-none focus:border-[#d32f2f] transition-all">
+        </div>
+        <button type="submit" class="w-full bg-[#1a1a1b] text-white py-4 rounded-[10px] font-bold hover:bg-black transition-all mt-4 cursor-pointer">
+          Entrar al Panel
+        </button>
+      </form>
+      
+      <div class="mt-6 text-center">
+        <a href="/" class="text-sm text-slate-400 hover:text-[#d32f2f] transition-colors">← Volver al inicio</a>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script is:inline>
+    document.getElementById('login-form').onsubmit = async (e) => {
+      e.preventDefault();
+      const u = document.getElementById('user').value;
+      const p = document.getElementById('pass').value;
+
+      try {
+        // Consultamos el "JSON" externo
+        const response = await fetch('/usuarios.json');
+        const adminData = await response.json();
+
+        const found = adminData.find(acc => acc.user === u && acc.pass === p);
+
+        if (found) {
+          localStorage.setItem('is_admin', 'true');
+          window.location.href = '/dashboard';
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Acceso Denegado',
+            text: 'Usuario o contraseña incorrectos',
+            confirmButtonColor: '#d32f2f'
+          });
+        }
+      } catch (error) {
+        console.error("Error al leer la base de datos", error);
+      }
+    };
+  </script>
+</Layout>

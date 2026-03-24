@@ -1,0 +1,56 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Abrir Nuevo Ticket">
+  
+  <div class="max-w-3xl mx-auto">
+    <div class="mb-8 border-b pb-4">
+      <h1 class="text-3xl font-bold text-gray-800">Abrir Ticket de Soporte</h1>
+      <p class="text-gray-600 mt-2">Por favor, detalla tu problema para que nuestro equipo de Nivel 1 pueda ayudarte en un tiempo máximo de 15 minutos (SLA).</p>
+    </div>
+
+    <form class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 space-y-6" action="/dashboard" method="GET">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre Completo</label>
+          <input type="text" placeholder="Ej. Cindy Bernardino" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-[#B91C1C] focus:ring-1 focus:ring-[#B91C1C] outline-none transition-colors" />
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Correo Institucional</label>
+          <input type="email" placeholder="usuario@uma.edu.sv" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-[#B91C1C] focus:ring-1 focus:ring-[#B91C1C] outline-none transition-colors" />
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Categoría del Incidente (Triage)</label>
+        <select required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-[#B91C1C] focus:ring-1 focus:ring-[#B91C1C] outline-none transition-colors bg-white">
+          <option value="" disabled selected>Selecciona una categoría...</option>
+          <option value="hardware">💻 Hardware - Fallas en Periféricos (Teclados, Monitores)</option>
+          <option value="software">☁️ Software - Servicio en la nube (OneDrive, Office 365)</option>
+          <option value="redes">🌐 Redes - Problemas de conexión Wi-Fi/LAN</option>
+          <option value="cuentas">🔐 Accesos - Reseteo de contraseñas o permisos</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Descripción del Problema</label>
+        <textarea rows="4" placeholder="Describe detalladamente qué estaba pasando cuando ocurrió el error..." required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-[#B91C1C] focus:ring-1 focus:ring-[#B91C1C] outline-none transition-colors resize-none"></textarea>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Adjuntar captura de pantalla (Opcional)</label>
+        <input type="file" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-[#B91C1C] hover:file:bg-red-100 transition-colors" />
+      </div>
+
+      <div class="pt-4">
+        <button type="submit" class="w-full bg-[#B91C1C] text-white font-bold py-3 px-4 rounded-lg hover:bg-red-800 transition-colors shadow-md">
+          📤 Enviar Ticket a Nivel 1
+        </button>
+      </div>
+      
+    </form>
+  </div>
+
+</Layout>
