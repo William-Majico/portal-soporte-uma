@@ -12,7 +12,8 @@ import Layout from '../layouts/Layout.astro';
             <div class="relative group">
                 <input 
                     type="text" 
-                    placeholder="¿Qué problema tienes hoy? Ej: Teclado, OneDrive..." 
+                    id="main-search"
+                    placeholder="¿Qué problema tienes hoy? Ej: Teclado, OneDrive, Espacio..." 
                     class="w-full p-[18px_25px] pl-[55px] bg-white border-2 border-[#e2e8f0] rounded-[15px] outline-none shadow-[0_4px_15px_rgba(0,0,0,0.03)] focus:border-[#d32f2f] focus:shadow-[0_10px_25px_rgba(211,47,47,0.1)] transition-all text-[1.05rem]"
                 />
                 <div class="absolute left-[20px] top-[50%] translate-y-[-50%] text-slate-400 group-focus-within:text-[#d32f2f] transition-colors">
@@ -21,20 +22,54 @@ import Layout from '../layouts/Layout.astro';
             </div>
         </div>
         
-        <nav class="grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-[30px] text-center max-w-[1000px] mx-auto">
+        <nav id="support-grid" class="grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-[30px] text-center max-w-[1000px] mx-auto">
             
-            <a href="/articulos/perifericos" class="bg-[#ffffff] border border-[#e2e8f0] rounded-[12px] p-[45px_30px] shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:-translate-y-[6px] hover:border-[#d32f2f] hover:shadow-[0_10px_30px_rgba(0,0,0,0.08)] transition-all duration-300 block relative">
+            <a href="/articulos/perifericos" class="support-card bg-[#ffffff] border border-[#e2e8f0] rounded-[12px] p-[45px_30px] shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:-translate-y-[6px] hover:border-[#d32f2f] hover:shadow-[0_10px_30px_rgba(0,0,0,0.08)] transition-all duration-300 block relative">
                 <div class="text-[3.5rem] mb-[25px] block">⌨️</div>
                 <h2 class="text-[1.15rem] font-[700] m-0 mb-[10px] text-[#1a1a1b] whitespace-nowrap">Fallas en periféricos (teclados/monitores)</h2>
                 <p class="m-0 text-[#64748b] text-[0.9rem]">Sustitución menor y diagnóstico físico de hardware.</p>
             </a>
 
-            <a href="/articulos/onedrive" class="bg-[#ffffff] border border-[#e2e8f0] rounded-[12px] p-[45px_30px] shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:-translate-y-[6px] hover:border-[#d32f2f] hover:shadow-[0_10px_30px_rgba(0,0,0,0.08)] transition-all duration-300 block relative">
+            <a href="/articulos/onedrive" class="support-card bg-[#ffffff] border border-[#e2e8f0] rounded-[12px] p-[45px_30px] shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:-translate-y-[6px] hover:border-[#d32f2f] hover:shadow-[0_10px_30px_rgba(0,0,0,0.08)] transition-all duration-300 block relative">
                 <div class="text-[3.5rem] mb-[25px] block">☁️</div>
                 <h2 class="text-[1.15rem] font-[700] m-0 mb-[10px] text-[#1a1a1b] whitespace-nowrap">Permisos y Cuotas OneDrive</h2>
                 <p class="m-0 text-[#64748b] text-[0.9rem]">Gestión de espacio y acceso a carpetas en la nube.</p>
             </a>
 
         </nav>
+
+        <div id="no-results" class="hidden mt-10 text-slate-400">
+            <p>No encontramos soluciones para esa búsqueda. Intenta con "Teclado" o "OneDrive".</p>
+        </div>
     </section>
+
+    <script is:inline>
+        const searchInput = document.getElementById('main-search');
+        const cards = document.querySelectorAll('.support-card');
+        const noResults = document.getElementById('no-results');
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase().trim();
+            let hasResults = false;
+
+            cards.forEach(card => {
+                // Obtenemos el texto del título y descripción de la tarjeta
+                const content = card.innerText.toLowerCase();
+                
+                if (content.includes(term)) {
+                    card.style.display = "block";
+                    hasResults = true;
+                } else {
+                    card.style.display = "none";
+                }
+            });
+
+            // Mostramos mensaje si nada coincide
+            if (!hasResults && term !== "") {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
+        });
+    </script>
 </Layout>
