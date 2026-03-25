@@ -1,5 +1,5 @@
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
 
 @theme {
   --font-sans: 'Inter', sans-serif;
@@ -7,9 +7,22 @@
 
 body {
   font-family: 'Inter', sans-serif;
+  background-color: #f8fafc;
+  color: #1a1a1b;
 }
 
 /* Configuración global para que todo lo clicable tenga el puntero de mano */
-button, a, [role="button"], input[type="submit"] {
+button, a, [role="button"], input[type="submit"], .support-card {
   cursor: pointer !important;
+}
+
+/* Animaciones suaves para el portal */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }

@@ -1,63 +1,41 @@
 ---
-import '../styles/global.css';
-interface Props { title: string; }
+interface Props {
+	title: string;
+}
+
 const { title } = Astro.props;
+import '../styles/global.css';
 ---
 
 <!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title} | Soporte TI UMA</title>
-</head>
-<body class="bg-[#f8fafc] text-[#1e293b] m-0 transition-all duration-300">
-    
-    <nav class="bg-[#1a1a1b] py-[10px] sticky top-0 z-[100]">
-        <div class="max-w-[1200px] mx-auto flex justify-between items-center px-[5%]">
-            <div class="text-white font-[800] text-[1.2rem]">
-                <span class="text-[#d32f2f]">UMA</span> IT Support
-            </div>
-            <div class="flex items-center gap-[15px]">
-                <a href="/" class="bg-transparent border-none text-[#94a3b8] cursor-pointer font-[600] text-[0.9rem] hover:text-white transition-colors">Inicio</a>
-                
-                <a href="/dashboard" class="bg-white/10 px-[16px] py-[8px] rounded-[8px] text-white border border-white/20 font-[600] text-[0.9rem] flex items-center hover:bg-white/20 transition-colors">
-                    📊 Ver Tickets 
-                    <span id="global-ticket-count" class="bg-[#d32f2f] text-white px-[7px] py-[2px] rounded-[6px] text-[0.7rem] font-[700] ml-[5px]">
-                        0
-                    </span>
-                </a>
-            </div>
-        </div>
-    </nav>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Centro de Resolución UMA - Nivel 0" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/portal-soporte-uma/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title} | Soporte UMA</title>
+		
+		<script is:inline src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	</head>
+	<body class="bg-[#f8fafc] min-h-screen">
+		<nav class="bg-white border-b border-[#e2e8f0] p-4 mb-8 shadow-sm">
+			<div class="max-w-[1000px] mx-auto flex justify-between items-center">
+				<a href="/portal-soporte-uma/" class="font-black text-[#d32f2f] text-xl tracking-tighter">UMA <span class="text-slate-400 font-light">| SOPORTE</span></a>
+				<div class="flex gap-6 text-sm font-bold text-slate-600">
+					<a href="/portal-soporte-uma/" class="hover:text-[#d32f2f] transition-colors">Inicio</a>
+					<a href="/portal-soporte-uma/dashboard" class="hover:text-[#d32f2f] transition-colors">Panel Técnico</a>
+				</div>
+			</div>
+		</nav>
 
-    <main class="max-w-[1100px] mx-auto mt-[50px] mb-[50px] px-[4%] text-center">
-        <slot />
-    </main>
+		<main class="max-w-[1000px] mx-auto px-4 pb-20">
+			<slot />
+		</main>
 
-    <script is:inline>
-        function updateGlobalCounter() {
-            const counterElement = document.getElementById('global-ticket-count');
-            if (counterElement) {
-                // Obtenemos los tickets de la "base de datos" local
-                const tickets = JSON.parse(localStorage.getItem('uma_tickets')) || [];
-                // Ponemos la cantidad real en el circulito rojo
-                counterElement.innerText = tickets.length;
-            }
-        }
-
-        // Se ejecuta apenas carga la página
-        updateGlobalCounter();
-
-        // Esto detecta si borras o agregas tickets desde otras pestañas
-        window.addEventListener('storage', updateGlobalCounter);
-        
-        // También escuchamos cambios manuales en la misma página
-        window.addEventListener('click', () => {
-            // Un pequeño delay para esperar a que las funciones de borrar terminen
-            setTimeout(updateGlobalCounter, 100);
-        });
-    </script>
-
-</body>
+		<footer class="text-center py-10 text-slate-400 text-xs border-t border-[#e2e8f0] bg-white mt-20">
+			&copy; 2026 Laboratorio 2 - William Majico & Cindy Bernardino. Gestión de Servicios TI (ITIL).
+		</footer>
+	</body>
 </html>
